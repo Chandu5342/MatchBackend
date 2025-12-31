@@ -22,3 +22,24 @@ export const getMatchById = async (id) => {
   );
   return result.rows[0];
 };
+export const searchMatches = async (search) => {
+  const result = await pool.query(
+    `SELECT * FROM matches
+     WHERE team_a ILIKE $1 OR team_b ILIKE $1
+     ORDER BY start_time ASC`,
+    [`%${search}%`]
+  );
+  return result.rows;
+};
+
+export const getFavoriteMatches = async (userId) => {
+  const result = await pool.query(
+    `SELECT m.*
+     FROM favorites f
+     JOIN matches m ON f.match_id = m.id
+     WHERE f.user_id = $1
+     ORDER BY m.start_time ASC`,
+    [userId]
+  );
+  return result.rows;
+};

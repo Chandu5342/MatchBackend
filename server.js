@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { connectDB } from "./config/db.js";
 import authRoutes from "./routes/auth.routes.js";
 import matchRoutes from "./routes/match.routes.js";
+import favoriteRoutes from "./routes/favorite.routes.js";
 
 dotenv.config();
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/matches", matchRoutes);
+app.use("/favorites", favoriteRoutes);
 
 // test route
 app.get("/", (req, res) => {

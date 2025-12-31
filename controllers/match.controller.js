@@ -1,14 +1,22 @@
 import {
   getAllMatches,
   getMatchesBySport,
+  searchMatches,
+  getFavoriteMatches,
 } from "../models/match.model.js";
 
 export const getMatches = async (req, res) => {
   try {
-    const { sport } = req.query;
+    const { sport, search, favorites } = req.query;
+    const userId = req.user.id;
 
     let matches;
-    if (sport) {
+
+    if (favorites === "true") {
+      matches = await getFavoriteMatches(userId);
+    } else if (search) {
+      matches = await searchMatches(search);
+    } else if (sport) {
       matches = await getMatchesBySport(sport);
     } else {
       matches = await getAllMatches();
