@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { createUser, getUserByEmail } from "../models/user.model.js";
+import { createUser, getUserByEmail, getUserById } from "../models/user.model.js";
 import { generateToken } from "../utils/jwt.js";
 
 export const register = async (req, res) => {
@@ -27,6 +27,16 @@ export const register = async (req, res) => {
   }
 };
 
+export const getMe = async (req, res) => {
+  try {
+    const user = await getUserById(req.user.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+    res.status(200).json({ user });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to fetch user" });
+  }
+};
+
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -45,8 +55,8 @@ export const login = async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const token = generateToken(user.id);
-
+    const token = generateToken(user);
+    console.log("Generated Token:", token);
     res.status(200).json({
       message: "Login successful",
       token,
@@ -54,6 +64,7 @@ export const login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
+        role: user.role || "user",
       },
     });
   } catch (error) {

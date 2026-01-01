@@ -43,3 +43,32 @@ export const getFavoriteMatches = async (userId) => {
   );
   return result.rows;
 };
+
+export const createMatch = async ({ sport, league, team_a, team_b, start_time }) => {
+  const result = await pool.query(
+    `INSERT INTO matches (sport, league, team_a, team_b, start_time)
+     VALUES ($1, $2, $3, $4, $5)
+     RETURNING *`,
+    [sport, league, team_a, team_b, start_time]
+  );
+  return result.rows[0];
+};
+
+export const updateMatch = async (id, { sport, league, team_a, team_b, start_time }) => {
+  const result = await pool.query(
+    `UPDATE matches
+     SET sport = $1, league = $2, team_a = $3, team_b = $4, start_time = $5
+     WHERE id = $6
+     RETURNING *`,
+    [sport, league, team_a, team_b, start_time, id]
+  );
+  return result.rows[0];
+};
+
+export const deleteMatch = async (id) => {
+  const result = await pool.query(
+    `DELETE FROM matches WHERE id = $1 RETURNING *`,
+    [id]
+  );
+  return result.rows[0];
+};
