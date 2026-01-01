@@ -1,7 +1,30 @@
 # MatchFinder — Backend
 
 This is the backend API for **MatchFinder**, built with **Node.js**, **Express**, and **PostgreSQL**. It provides authentication, match listing, favorites, and admin-only match management.
+---
 
+## Live Link
+
+https://matchbackend.onrender.com
+
+---
+
+## Folder Structure
+
+```
+backend/
+│── config/         # DB connection
+│── controllers/    # Route handlers
+│── middleware/     # auth + role checks
+│── models/         # DB queries
+│── routes/         # API endpoints
+│── seedMatches.js  # sample match data
+│── seedAdmin.js    # create admin user
+│── server.js       # entry point
+│── .env            # environment variables
+```
+
+---
 ---
 
 ## Features
@@ -75,15 +98,6 @@ backend/
 
 ---
 
-## Database
-
-Ensure your `users` table has a `role` column (default `user`). Run in Supabase SQL editor if needed:
-
-```sql
-ALTER TABLE users ADD COLUMN role TEXT NOT NULL DEFAULT 'user';
-```
-
----
 
 ## Environment (`.env`)
 
@@ -95,13 +109,11 @@ DATABASE_URL=postgresql://<user>:<password>@<host>:5432/<db>
 JWT_SECRET=your_jwt_secret
 ```
 
-> Do NOT commit real secrets to the repo.
-
 ---
 
 ## Seed admin & matches
 
-To create a seeded admin user (admin@example.com / admin123):
+To create a seeded admin user (admin@gmail.com / 123456):
 
 ```bash
 cd backend
@@ -128,10 +140,3 @@ npm run dev   # or `node server.js`
 Server runs on `http://localhost:5000` by default.
 
 ---
-
-## Notes
-
-* Login response includes `token` and `user` (with `role`) — frontend depends on `user.role` to show admin UI.
-* Admin endpoints are protected by both `authMiddleware` and `adminMiddleware`.
-
-If you want, I can add a full Swagger/OpenAPI spec or a Postman collection for the endpoints.
